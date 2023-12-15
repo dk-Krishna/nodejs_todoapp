@@ -29,6 +29,10 @@ app.use(
 app.use("/api/v1", userRoutes);
 app.use("/api/v1/task", taskRoutes);
 
+app.get("/", (req, res)=> {
+    res.send("Nice Working...");
+});
+
 
 export default app;
 
