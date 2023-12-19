@@ -1,4 +1,5 @@
 import Task from "../models/task.js";
+import ErrorHandler from "../utils/errorHandler.js";
 
 export const newTask = async (req, res, next) => {
   const { title, description } = req.body;
@@ -29,6 +30,8 @@ export const updateTask = async (req, res, next) => {
 
   const task = await Task.findById(id);
 
+  if (!task) return next(new ErrorHandler("Invalid Id", 404));
+
   task.isCompleted = !task.isCompleted;
 
   await task.save();
@@ -44,11 +47,7 @@ export const deleteTask = async (req, res, next) => {
 
   const task = await Task.findById(id);
 
-  if (!task)
-    return res.status(200).json({
-      success: false,
-      message: "Invalid Id",
-    });
+  if (!task) return next(new ErrorHandler("Invalid Id", 404));
 
   await task.deleteOne();
 

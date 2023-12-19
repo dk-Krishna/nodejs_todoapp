@@ -11,7 +11,7 @@ const router = express.Router();
 // testing api
 router.route("/").get(testingcontroller);
 
-router.route("/user").post(registeruser);
+router.route("/new").post(registeruser);
 
 router.route("/login").post(loginuser);
 

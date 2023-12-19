@@ -1,22 +1,19 @@
 import User from "../models/user.js";
 import bcrypt from "bcrypt";
 import sendToken from "../utils/sendToken.js";
+import ErrorHandler from "../utils/errorHandler.js";
 
 export const testingcontroller = (req, res, next) => {
   res.send("Working fine...");
 };
 
-export const registeruser = async (req, res) => {
+export const registeruser = async (req, res, next) => {
   const { name, email, password } = req.body;
 
   let user = await User.findOne({ email });
 
-  if (user)
-    return res.status(400).json({
-      success: false,
-      message: "User Already Exist",
-    });
-
+  if (user) return next(new ErrorHandler("User Already Exist", 400));
+  
   const hashedPassword = await bcrypt.hash(password, 10);
 
   user = await User.create({
@@ -28,24 +25,16 @@ export const registeruser = async (req, res) => {
   sendToken(res, user, "Registered Successfully", 201);
 };
 
-export const loginuser = async (req, res) => {
+export const loginuser = async (req, res, next) => {
   const { email, password } = req.body;
 
   const user = await User.findOne({ email }).select("+password");
 
-  if (!user)
-    return res.status(400).json({
-      success: false,
-      message: "Invalid Email or Password riushna",
-    });
+  if (!user) return next(new ErrorHandler("Invalid Email or Password", 400));
 
   const isMatch = await bcrypt.compare(password, user.password);
 
-  if (!isMatch)
-    return res.status(400).json({
-      success: false,
-      message: "Invalid Email or Password",
-    });
+  if (!isMatch) return next(new ErrorHandler("Invalid Email or Password", 404));
 
   sendToken(res, user, `Welcome back, ${user.name}`, 200);
 };
