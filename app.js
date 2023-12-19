@@ -14,8 +14,6 @@ const app = express();
 import userRoutes from "./routes/userRoutes.js";
 import taskRoutes from "./routes/taskRoutes.js";
 
-console.log(process.env.FRONTEND_URL);
-
 // using middlewares
 app.use(bodyParser.urlencoded({ extended: false })); // for using req.body in form
 app.use(express.json()); // for using req.body in postman
