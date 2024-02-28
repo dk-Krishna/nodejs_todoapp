@@ -19,11 +19,11 @@ app.use(bodyParser.urlencoded({ extended: false })); // for using req.body in fo
 app.use(express.json()); // for using req.body in postman
 app.use(cookieParser());
 app.use(
-    cors({
-        origin: [process.env.FRONTEND_URL],
-        methods: ["GET", "POST", "PUT", "DELETE"],
-        credentials: true,
-    })
+  cors({
+    origin: "*",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  })
 );
 
 // using routes
@@ -34,7 +34,6 @@ export default app;
 
 // using error middleware
 app.use(errorMiddleware);
-
 
 // AT time of deployement we don't need to enter following in package.json file
 // "start": "set NODE_ENV=Production&& node ./server.js",
